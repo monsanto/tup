@@ -272,13 +272,13 @@ static int context_check(void)
 	}
 #endif
 
-	if(ourpgid != pgid) {
-		if(server_debug_enabled()) {
-			fprintf(stderr, "[33mtup fuse warning: Process pid=%i, uid=%i, gid=%i is trying to access the tup server's fuse filesystem.[0m\n",
-					fuse_get_context()->pid, fuse_get_context()->uid, fuse_get_context()->gid);
-		}
-		return -1;
-	}
+	/* if(ourpgid != pgid) { */
+	/* 	if(server_debug_enabled()) { */
+	/* 		fprintf(stderr, "[33mtup fuse warning: Process pid=%i, uid=%i, gid=%i is trying to access the tup server's fuse filesystem.[0m\n", */
+	/* 				fuse_get_context()->pid, fuse_get_context()->uid, fuse_get_context()->gid); */
+	/* 	} */
+	/* 	return -1; */
+	/* } */
 	return 0;
 }
 
