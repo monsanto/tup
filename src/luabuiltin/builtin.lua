@@ -122,7 +122,7 @@ tup.frule = function(arguments)
 
 		newinputs = {}
 		for index, input in ipairs(inputs) do
-			glob = conditionalglob(input)
+			local glob = conditionalglob(input)
 			for globindex, globvalue in ipairs(glob) do
 				if(not duplicates[globvalue]) then
 					duplicates[globvalue] = 1
@@ -173,7 +173,7 @@ tup.frule = function(arguments)
 
 		newoutputs = {}
 		for index, output in ipairs(outputs) do
-			glob = conditionalglob(output)
+			local glob = conditionalglob(output)
 			for globindex, globvalue in ipairs(glob) do
 				table.insert(newoutputs, globvalue)
 			end
