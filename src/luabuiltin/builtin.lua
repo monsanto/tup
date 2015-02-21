@@ -155,11 +155,12 @@ tup.frule = function(arguments)
 			newoutput = evalConfig(newoutput)
 
 			if not inputs or not inputs[1] then
-				if output:match('%%b') or output:match('%%B') or output:match('%%e') then
-					error 'tup.frule can only use output formatters %b, %B, or %e with exactly one input.'
+				if output:match('%%f') or output:match('%%b') or output:match('%%B') or output:match('%%e') then
+					error 'tup.frule can only use output formatters %f, %b, %B, or %e with exactly one input.'
 				end
 			else
 				newoutput = newoutput
+					:gsub('%%f', inputs[1])
 					:gsub('%%b', tup.file(inputs[1]))
 					:gsub('%%B', tup.base(inputs[1]))
 					:gsub('%%e', tup.ext(inputs[1]))
