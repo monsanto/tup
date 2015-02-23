@@ -248,41 +248,6 @@ static struct mapping *find_mapping(struct file_info *finfo, const char *path)
 
 static int context_check(void)
 {
-	pid_t pgid;
-
-	/* Only processes spawned by tup should be able to access our
-	 * file-system. This is determined by the fact that all sub-processes
-	 * should be in the same process group as tup itself. Since the fuse
-	 * thread runs in the main tup process, we can check our own pgid by
-	 * using getpgid(0). If their pgid doesn't match, we bail since nobody
-	 * else is allowed to look at our filesystem. If they could, that would
-	 * hose up our dependency analysis.
-	 */
-	pgid = getpgid(fuse_get_context()->pid);
-
-	/* OSX will fail to return a valid pgid for a zombie process.  However,
-	 * for some reason when using 'ar' to create archives, a zombie libtool
-	 * process will call 'unlink' on the .fuse_hidden file. If we ignore
-	 * that check, then tup will save the .fuse_hidden file as a separate
-	 * output because hidden files are ignored.
-	 *
-	 * Separately, Linux running in a container will have a bogus fuse
-	 * context pid, so getpgid() always fails. There doesn't seem to be
-	 * much we can do in this case. Fortunately, if lxc is working that
-	 * probably means we're using a separate mount namespace anyway, making
-	 * this check moot.
-	 */
-	if(pgid == -1 && errno == ESRCH) {
-		return 0;
-	}
-
-	if(ourpgid != pgid) {
-		if(server_debug_enabled()) {
-			fprintf(stderr, "[33mtup fuse warning: Process pid=%i, uid=%i, gid=%i is trying to access the tup server's fuse filesystem.[0m\n",
-					fuse_get_context()->pid, fuse_get_context()->uid, fuse_get_context()->gid);
-		}
-		return -1;
-	}
 	return 0;
 }
 
